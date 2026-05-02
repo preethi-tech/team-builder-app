@@ -1,0 +1,40 @@
+steps:
+  # Build the React application
+  - name: 'node:20'
+    entrypoint: 'npm'
+    args: ['ci']
+    dir: '.'
+
+  - name: 'node:20'
+    entrypoint: 'npm'
+    args: ['run', 'build']
+    dir: '.'
+
+  # Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/teamsync:$COMMIT_SHA', '-t', 'gcr.io/$PROJECT_ID/teamsync:latest', '.']
+
+  # Push to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/teamsync:$COMMIT_SHA']
+    args: ['push', 'gcr.io/$PROJECT_ID/teamsync:latest']
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'teamsync'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/teamsync:$COMMIT_SHA'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--port'
+      - '8080'
+
+images:
+  - 'gcr.io/$PROJECT_ID/teamsync:$COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/teamsync:latest'
