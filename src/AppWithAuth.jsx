@@ -7,6 +7,7 @@ import { NotificationProvider } from './contexts/NotificationContext';
 import { Login } from './components/auth/Login';
 import { Signup } from './components/auth/Signup';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import ErrorBoundary from './components/ErrorBoundary';
 import App from './App';
 
 const queryClient = new QueryClient({
@@ -22,72 +23,74 @@ const queryClient = new QueryClient({
 
 function AppWithAuth() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <ProjectProvider>
-          <TaskProvider>
-            <NotificationProvider>
-              <Router>
-                <Routes>
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/signup" element={<Signup />} />
-                  <Route
-                    path="/dashboard"
-                    element={
-                      <ProtectedRoute>
-                        <App />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/tasks"
-                    element={
-                      <ProtectedRoute>
-                        <App />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/team"
-                    element={
-                      <ProtectedRoute>
-                        <App />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/messages"
-                    element={
-                      <ProtectedRoute>
-                        <App />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/analytics"
-                    element={
-                      <ProtectedRoute>
-                        <App />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/settings"
-                    element={
-                      <ProtectedRoute>
-                        <App />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route path="/" element={<Navigate to="/login" replace />} />
-                  <Route path="*" element={<Navigate to="/login" replace />} />
-                </Routes>
-              </Router>
-            </NotificationProvider>
-          </TaskProvider>
-        </ProjectProvider>
-      </AuthProvider>
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <ProjectProvider>
+            <TaskProvider>
+              <NotificationProvider>
+                <Router>
+                  <Routes>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
+                    <Route
+                      path="/dashboard"
+                      element={
+                        <ProtectedRoute>
+                          <App />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/tasks"
+                      element={
+                        <ProtectedRoute>
+                          <App />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/team"
+                      element={
+                        <ProtectedRoute>
+                          <App />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/messages"
+                      element={
+                        <ProtectedRoute>
+                          <App />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/analytics"
+                      element={
+                        <ProtectedRoute>
+                          <App />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/settings"
+                      element={
+                        <ProtectedRoute>
+                          <App />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route path="/" element={<Navigate to="/login" replace />} />
+                    <Route path="*" element={<Navigate to="/login" replace />} />
+                  </Routes>
+                </Router>
+              </NotificationProvider>
+            </TaskProvider>
+          </ProjectProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 
